@@ -22,46 +22,38 @@ import java.awt.Color;
 
 import javax.swing.SwingConstants;
 
+import controlador.Controlador;
+
+
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class vMenu extends JFrame {
+public class VentanaMenu extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
+	private Controlador miCoordinador;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					vMenu frame = new vMenu();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public vMenu() {
+	public VentanaMenu() {
 		
-		setResizable(false);
-		setTitle("Lluvia de letras");
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 750, 500);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		setResizable(false);
+		setTitle("Lluvia de letras");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(0, 0, 750, 500);
+		setLocationRelativeTo(null);
 		
 		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new java.awt.event.WindowAdapter() {
@@ -88,10 +80,8 @@ public class vMenu extends JFrame {
 		JButton btnIdent = new JButton("Identificarse");
 		btnIdent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vIdentificarse vi = new vIdentificarse();
-				vi.setVisible(true);
+				miCoordinador.mostrarVentanaIdentificarse();
 				dispose();
-
 			}
 		});
 		btnIdent.setHorizontalAlignment(SwingConstants.LEFT);
@@ -114,10 +104,8 @@ public class vMenu extends JFrame {
 		JButton btnNueva = new JButton("Nueva Partida");
 		btnNueva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vJoc vj = new vJoc();
-				vj.setVisible(true);
+				miCoordinador.mostrarVentanaJuego();
 				dispose();
-
 			}
 		});
 		
@@ -143,10 +131,8 @@ public class vMenu extends JFrame {
 		JButton btnRanking = new JButton("Ranking");
 		btnRanking.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vRanking vr = new vRanking();
-				vr.setVisible(true);
+				miCoordinador.mostrarVentanaRanking();
 				dispose();
-
 			}
 		});
 		btnRanking.setHorizontalAlignment(SwingConstants.LEFT);
@@ -169,10 +155,8 @@ public class vMenu extends JFrame {
 		JButton btnEstats = new JButton("Estadisticas");
 		btnEstats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vEstadisticas ve = new vEstadisticas();
-				ve.setVisible(true);
+				miCoordinador.mostrarVentanaEstadisticas();
 				dispose();
-
 			}
 		});
 		
@@ -196,10 +180,8 @@ public class vMenu extends JFrame {
 		JButton btnAyuda = new JButton("Ayuda");
 		btnAyuda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vAyuda va = new vAyuda();
-				va.setVisible(true);
+				miCoordinador.mostrarVentanaAyuda();
 				dispose();
-
 			}
 		});
 		
@@ -245,6 +227,15 @@ public class vMenu extends JFrame {
 		
 		
 		
-    }  
+    }
+	
+	public void setCoordinador(Controlador miCoordinador) {
+		this.miCoordinador=miCoordinador;
+	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }

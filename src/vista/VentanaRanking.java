@@ -22,21 +22,27 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class vRanking extends JFrame {
+import controlador.Controlador;
+
+
+
+public class VentanaRanking extends JFrame {
 
 	private JPanel contentPane;
 	private JTable rank;
 	private DefaultTableModel dtmR;
 	private JScrollPane scrollPaneR;
+	
+	private Controlador miCoordinador;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vRanking frame = new vRanking();
+					VentanaRanking frame = new VentanaRanking();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
@@ -44,19 +50,19 @@ public class vRanking extends JFrame {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the frame.
 	 */
-	public vRanking() {
+	public VentanaRanking() {
 		
 		setResizable(false);
 		setTitle("Lluvia de letras");
-	
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 750, 500);
+		setLocationRelativeTo(null);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -95,10 +101,8 @@ public class vRanking extends JFrame {
 		JButton btnMenu = new JButton("Menú principal");
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vMenu vm = new vMenu();
-				vm.setVisible(true);
+				miCoordinador.mostrarVentanaMenu();
 				dispose();
-
 			}
 		});
 		btnMenu.setForeground(Color.WHITE);
@@ -119,10 +123,8 @@ public class vRanking extends JFrame {
 		JButton btnEstats = new JButton("Estadisticas");
 		btnEstats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vEstadisticas ve = new vEstadisticas();
-				ve.setVisible(true);
+				miCoordinador.mostrarVentanaEstadisticas();
 				dispose();
-
 			}
 		});
 		btnEstats.setForeground(Color.WHITE);
@@ -144,10 +146,8 @@ public class vRanking extends JFrame {
 		JButton btnNueva = new JButton("Nueva Partida");
 		btnNueva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vJoc vj = new vJoc();
-				vj.setVisible(true);
+				miCoordinador.mostrarVentanaJuego();
 				dispose();
-
 			}
 		});
 		btnNueva.setForeground(Color.WHITE);
@@ -203,4 +203,8 @@ public class vRanking extends JFrame {
     	  dtmR.removeRow(i);
       }
   }
+  
+  public void setCoordinador(Controlador miCoordinador) {
+		this.miCoordinador=miCoordinador;
+	}
 }

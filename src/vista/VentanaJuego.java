@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -26,8 +27,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 import javax.swing.JProgressBar;
 
-public class vJoc extends JFrame {
+import controlador.Controlador;
 
+
+
+public class VentanaJuego extends JFrame {
+
+	private Controlador miCoordinador;
+	
 	private JTable taulap3;
 	private JTable taulap4;
 	private JTable taulap5;
@@ -54,42 +61,25 @@ public class vJoc extends JFrame {
 	private JTextField tLletra6;
 	private JTextField textField_1;
 	private JLabel lblProgressBar;
-	private JLabel lblPunts;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					vJoc frame = new vJoc();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JLabel tPuntuacio;
 
 	/**
 	 * Create the frame.
 	 */
-	public vJoc() {
+	public VentanaJuego() {
+		
 		setResizable(false);
 		setTitle("Lluvia de letras");
-
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 750, 500);
+		setLocationRelativeTo(null);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		// ******************************** TITULO
-		// ********************************
+		// ******************************** TITULO ********************************
 
 		JLabel lbTitulo = new JLabel("L L U V I A   D E   L E T R A S");
 		lbTitulo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -98,8 +88,7 @@ public class vJoc extends JFrame {
 		lbTitulo.setBounds(10, 42, 724, 36);
 		contentPane.add(lbTitulo);
 
-		// ******************************** CLOCK
-		// ********************************
+		// ******************************** CLOCK ********************************
 
 		final long THIRTY_MINUTES = 60000;
 
@@ -120,8 +109,7 @@ public class vJoc extends JFrame {
 		}
 		contentPane.add(clock);
 
-		// ******************************** LLETRES
-		// ********************************
+		// ******************************** LLETRES ********************************
 
 		tLletra1 = new JTextField("B");
 		tLletra1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -177,15 +165,14 @@ public class vJoc extends JFrame {
 		tLletra6.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(tLletra6);
 
-		// ******************************** PUNTUACIÓ
-		// ********************************
+		// ******************************** PUNTUACIÓ ********************************
 
-		lblPunts = new JLabel("30");
-		lblPunts.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPunts.setForeground(Color.WHITE);
-		lblPunts.setFont(new Font("Verdana", Font.BOLD, 18));
-		lblPunts.setBounds(651, 165, 72, 30);
-		contentPane.add(lblPunts);
+		tPuntuacio = new JLabel("30");
+		tPuntuacio.setHorizontalAlignment(SwingConstants.CENTER);
+		tPuntuacio.setForeground(Color.WHITE);
+		tPuntuacio.setFont(new Font("Verdana", Font.BOLD, 18));
+		tPuntuacio.setBounds(651, 165, 72, 30);
+		contentPane.add(tPuntuacio);
 
 		JLabel lblPuntuacio = new JLabel("");
 		lblPuntuacio.setHorizontalAlignment(SwingConstants.CENTER);
@@ -198,8 +185,7 @@ public class vJoc extends JFrame {
 		lblPuntuacio.setBounds(641, 115, 93, 52);
 		contentPane.add(lblPuntuacio);
 
-		// ******************************** BOTÓ MENÚ COMPROBAR
-		// ********************************
+		// ******************************** BOTÓ MENÚ COMPROBAR ********************************
 
 		JButton btnComprobar = new JButton("Comprobar");
 		btnComprobar.addActionListener(new ActionListener() {
@@ -223,16 +209,13 @@ public class vJoc extends JFrame {
 		btnComprobar.setBounds(582, 194, 168, 50);
 		contentPane.add(btnComprobar);
 
-		// ******************************** BOTÓ MENÚ PRINCIPAL
-		// ********************************
+		// ******************************** BOTÓ MENÚ PRINCIPAL ********************************
 
 		JButton btnMenu = new JButton("Menú principal");
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vMenu vm = new vMenu();
-				vm.setVisible(true);
+				miCoordinador.mostrarVentanaMenu();
 				dispose();
-
 			}
 		});
 		btnMenu.setForeground(Color.WHITE);
@@ -257,8 +240,7 @@ public class vJoc extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 
-		// ******************************** TABLA 3
-		// LETRAS********************************
+		// ******************************** TABLA 3 LETRAS********************************
 
 		dtm3 = new DefaultTableModel();
 
@@ -272,8 +254,7 @@ public class vJoc extends JFrame {
 		scrollPane3.setViewportView(taulap3);
 		taulap3.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		// ******************************** TABLA 4
-		// LETRAS********************************
+		// ******************************** TABLA 4 LETRAS********************************
 
 		dtm4 = new DefaultTableModel();
 
@@ -287,8 +268,7 @@ public class vJoc extends JFrame {
 		scrollPane4.setViewportView(taulap4);
 		taulap4.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		// ******************************** TABLA 5
-		// LETRAS********************************
+		// ******************************** TABLA 5 LETRAS********************************
 
 		dtm5 = new DefaultTableModel();
 
@@ -302,8 +282,7 @@ public class vJoc extends JFrame {
 		scrollPane5.setViewportView(taulap5);
 		taulap5.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		// ******************************** TABLA 6
-		// LETRAS********************************
+		// ******************************** TABLA 6 LETRAS********************************
 
 		dtm6 = new DefaultTableModel();
 		dtm6.addColumn("6 LETRAS");
@@ -316,8 +295,7 @@ public class vJoc extends JFrame {
 		scrollPane6.setViewportView(taulap6);
 		taulap6.setPreferredScrollableViewportSize(new Dimension(100, 70));
 
-		// ******************************** NUBES
-		// ********************************
+		// ******************************** NUBES ********************************
 
 		JLabel lblNubes = new JLabel("");
 		lblNubes.setBounds(20, 0, 720, 200);
@@ -328,8 +306,7 @@ public class vJoc extends JFrame {
 		}
 		contentPane.add(lblNubes);
 
-		// ******************************** PROGRESSBARR
-		// ********************************
+		// ******************************** PROGRESSBARR  ********************************
 		/*
 		 * lblProgressBar = new JLabel("40 %"); lblProgressBar
 		 * lblProgressBar.setFont(new Font("Verdana", Font.BOLD, 12));
@@ -347,13 +324,11 @@ public class vJoc extends JFrame {
 		progressBar.setBounds(650, 245, 78, 160);
 		contentPane.add(progressBar);
 
-		// ******************************** BOTÓ MENÚ RANKING
-		// ********************************
+		// ******************************** BOTÓ MENÚ RANKING  ********************************
 		JButton btnEstats = new JButton("Ranking");
 		btnEstats.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vRanking vk = new vRanking();
-				vk.setVisible(true);
+				miCoordinador.mostrarVentanaRanking();
 				dispose();
 			}
 		});
@@ -372,8 +347,7 @@ public class vJoc extends JFrame {
 		btnEstats.setBounds(259, 406, 228, 70);
 		contentPane.add(btnEstats);
 
-		// ******************************** BOTÓ NUEVA
-		// ********************************
+		// ******************************** BOTÓ NUEVA ********************************
 
 		JButton btnNueva = new JButton("Nueva Partida");
 		btnNueva.addActionListener(new ActionListener() {
@@ -382,9 +356,8 @@ public class vJoc extends JFrame {
 				if (JOptionPane.showConfirmDialog(rootPane,
 						"¿Estas seguro de que deseas abandonar la partida?",
 						"Salir de Lluvia de Letras", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-					vJoc vj = new vJoc();
-					vj.setVisible(true);
-					dispose();
+
+					
 				}
 			}
 		});
@@ -403,8 +376,7 @@ public class vJoc extends JFrame {
 		btnNueva.setBounds(10, 406, 221, 70);
 		contentPane.add(btnNueva);
 
-		// ******************************** FONDO
-		// ********************************
+		// ******************************** FONDO  ********************************
 
 		JLabel lblFondo = new JLabel("");
 		lblFondo.setBounds(0, 0, 750, 471);
@@ -440,6 +412,83 @@ public class vJoc extends JFrame {
 		tLletra5.setText(String.valueOf(l5).toUpperCase());
 		tLletra6.setText(String.valueOf(l6).toUpperCase());
 
+	}
+
+	
+	public void setCoordinador(Controlador miCoordinador) {
+		this.miCoordinador=miCoordinador;
+	}
+	
+	/**
+	 * omplim la taula de 3 lletres amb les combinacions possibles
+	 * @param paraules
+	 */
+	public void omplirTaula3 (ArrayList<String> paraules){
+		
+		dtm3.setNumRows(paraules.size()); 
+
+		for(int i=0;i<paraules.size();i++){
+
+			dtm3.setValueAt(paraules.get(i), i, 0); //objecte, fila, nº columna (en aquest cas nomes n'hi ha 1...)
+			
+		}
+
+	}
+	
+	/**
+	 * omplim la taula de 4 lletres amb les combinacions possibles
+	 * @param paraules
+	 */
+	public void omplirTaula4 (ArrayList<String> paraules){
+		
+		dtm4.setNumRows(paraules.size()); 
+
+		for(int i=0;i<paraules.size();i++){
+
+			dtm4.setValueAt(paraules.get(i), i, 0); 
+		
+		}
+
+	}
+
+	/**
+	 * omplim la taula de 5 lletres amb les combinacions possibles
+	 * @param paraules
+	 */
+	public void omplirTaula5 (ArrayList<String> paraules){
+	
+	dtm5.setNumRows(paraules.size()); 
+
+		for(int i=0;i<paraules.size();i++){
+	
+			dtm5.setValueAt(paraules.get(i), i, 0); 
+		}
+	}
+	
+	/**
+	 * omplim la taula de 6 lletres amb les combinacions possibles
+	 * @param paraules
+	 */
+
+	public void omplirTaula6 (ArrayList<String> paraules){
+		
+		dtm6.setNumRows(paraules.size()); 
+	
+		for(int i=0;i<paraules.size();i++){
+	
+			dtm6.setValueAt(paraules.get(i), i, 0); 
+		
+		}
+    }
+	
+	/**
+	 * actualitzam la puntuació que es mostra a l'usuari
+	 * @param paraules
+	 */
+	public void actualitzarPuntuacio(String punts) {
+		
+		tPuntuacio.setText(punts);
+		
 	}
 
 }

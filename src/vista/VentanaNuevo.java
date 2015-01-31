@@ -20,8 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class vNuevo extends JFrame {
+import controlador.Controlador;
 
+
+
+public class VentanaNuevo extends JFrame {
+
+	private Controlador miCoordinador;
+	
 	private JPanel contentPane;
 	private JLabel lblUsuario;
 	private JLabel lblConstrasenya;
@@ -30,37 +36,21 @@ public class vNuevo extends JFrame {
 	private JButton btnNuevo;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					vNuevo frame = new vNuevo();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public vNuevo() {
+	public VentanaNuevo() {
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setLocationRelativeTo(null);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		// ******************************** USUARIO
-		// ********************************
+		// ******************************** USUARIO ********************************
 		lblUsuario = new JLabel("Usuario:");
 		lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblUsuario.setForeground(Color.WHITE);
@@ -73,8 +63,7 @@ public class vNuevo extends JFrame {
 		contentPane.add(txtUsuario);
 		txtUsuario.setColumns(10);
 
-		// ******************************** CONTRASEÑA
-		// ********************************
+		// ******************************** CONTRASEÑA ********************************
 		lblConstrasenya = new JLabel("Contrase\u00F1a:");
 		lblConstrasenya.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblConstrasenya.setForeground(Color.WHITE);
@@ -93,8 +82,7 @@ public class vNuevo extends JFrame {
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(contentPane, "Usuario creado con exito");
-				vIdentificarse vi = new vIdentificarse();
-				vi.setVisible(true);
+				miCoordinador.mostrarVentanaIdentificarse();
 				dispose();
 			}
 		});
@@ -112,21 +100,14 @@ public class vNuevo extends JFrame {
 		btnNuevo.setFont(new Font("Verdana", Font.BOLD, 14));
 		btnNuevo.setBounds(183, 160, 226, 50);
 		contentPane.add(btnNuevo);
-		try {
-			Image imgIniciarSesion = ImageIO.read(getClass().getResource(
-					"/img/IniciarSesion.png"));
-		} catch (IOException ex) {
-		}
-
-		// ******************************** BOTÓ MENÚ PRINCIPAL
-		// ********************************
+		
+		
+		// ******************************** BOTÓ MENÚ PRINCIPAL ********************************
 		JButton btnMenu = new JButton("Menú principal");
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vMenu vm = new vMenu();
-				vm.setVisible(true);
+				miCoordinador.mostrarVentanaMenu();
 				dispose();
-
 			}
 		});
 		btnMenu.setForeground(Color.WHITE);
@@ -144,8 +125,7 @@ public class vNuevo extends JFrame {
 		btnMenu.setBounds(-3, 221, 447, 50);
 		contentPane.add(btnMenu);
 
-		// ******************************** FONDO
-		// ********************************
+		// ******************************** FONDO ********************************
 
 		JLabel lblFondo = new JLabel("");
 		lblFondo.setBounds(0, -20, 450, 300);
@@ -157,7 +137,10 @@ public class vNuevo extends JFrame {
 		} catch (IOException ex) {
 		}
 		contentPane.add(lblFondo);
-		
-		
+
+	}
+	
+	public void setCoordinador(Controlador miCoordinador) {
+		this.miCoordinador=miCoordinador;
 	}
 }

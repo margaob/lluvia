@@ -23,36 +23,23 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import javax.swing.DropMode;
 
-public class vAyuda extends JFrame {
+import controlador.Controlador;
+
+
+public class VentanaAyuda extends JFrame {
 
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					vAyuda frame = new vAyuda();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private Controlador miCoordinador;
 
 	/**
 	 * Create the frame.
 	 */
-	public vAyuda() {
+	public VentanaAyuda() {
 		setResizable(false);
 		setTitle("Lluvia de letras");
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 750, 500);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -98,16 +85,13 @@ public class vAyuda extends JFrame {
 				lbTitulo.setBounds(10, 20, 724, 36);
 				contentPane.add(lbTitulo);
 
-		// ******************************** BOTÓ MENÚ PRINCIPAL
-		// ********************************
+		// ******************************** BOTÓ MENÚ PRINCIPAL  ********************************
 
 		JButton btnMenu = new JButton("Menú principal");
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vMenu vm = new vMenu();
-				vm.setVisible(true);
+				miCoordinador.mostrarVentanaMenu();
 				dispose();
-
 			}
 		});
 		
@@ -127,16 +111,13 @@ public class vAyuda extends JFrame {
 		btnMenu.setBounds(384, 406, 228, 70);
 		contentPane.add(btnMenu);
 
-		// ******************************** BOTÓ NUEVA
-		// ********************************
+		// ******************************** BOTÓ NUEVA ********************************
 
 		JButton btnNueva = new JButton("Nueva Partida");
 		btnNueva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vJoc vj = new vJoc();
-				vj.setVisible(true);
+				miCoordinador.mostrarVentanaJuego();
 				dispose();
-
 			}
 		});
 		btnNueva.setForeground(Color.WHITE);
@@ -156,8 +137,7 @@ public class vAyuda extends JFrame {
 		
 		
 
-		// ******************************** FONDO
-		// ********************************
+		// ******************************** FONDO ********************************
 
 		JLabel lblFondo = new JLabel("");
 		lblFondo.setBounds(0, 0, 750, 471);
@@ -171,5 +151,9 @@ public class vAyuda extends JFrame {
 
 		contentPane.add(lblFondo);
 
+	}
+	
+	public void setCoordinador(Controlador miCoordinador) {
+		this.miCoordinador=miCoordinador;
 	}
 }

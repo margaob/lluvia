@@ -5,10 +5,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 public class Connexio {
 
 	Connection con=null;
-	
+
 	/** 
 	 * Constructor de la conexio de la BD
 	 */
@@ -17,14 +22,13 @@ public class Connexio {
 		
 			
 		try{
-			//driver oracle
-			Class.forName("oracle.jdbc.driver.OracleDriver");
+			//driver postgre
+			Class.forName("org.postgresql.Driver");
 			//obtenim la connexió
 			con = DriverManager.getConnection
-			("jdbc:oracle:thin:@192.168.56.101:1521:fbmoll",
-					"alumne","alumne");
+			("jdbc:postgresql://127.0.0.1/accesodatos?" + "user=openpg&password=openpgpwd");
 			if (con!=null){
-	            //System.out.println("Conexió a base de dades OK");
+	            System.out.println("Conexión a base de datos OK");
 	         }
 
 		}
@@ -32,7 +36,7 @@ public class Connexio {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Permet retornar la connexió
 	 */
@@ -41,8 +45,14 @@ public class Connexio {
 	   }
 
 	public void desconnectar(){
-	      con = null;
-	   }
-	
-	
+		
+		try{
+			con.close();
+
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}  
+	 }
+
 }

@@ -20,8 +20,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-public class vIdentificarse extends JFrame {
+import controlador.Controlador;
 
+public class VentanaIdentificarse extends JFrame {
+
+	private Controlador miCoordinador;
+	
 	private JPanel contentPane;
 	private JTextField txtUsuario;
 	private JTextField txtContrasenya;
@@ -31,32 +35,17 @@ public class vIdentificarse extends JFrame {
 	private JButton btnNuevo;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					vIdentificarse frame = new vIdentificarse();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public vIdentificarse() {
+	public VentanaIdentificarse() {
 		setResizable(false);
 		
 		setTitle("Lluvia de letras");
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 750, 500);
+		setLocationRelativeTo(null);
+		
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -77,10 +66,8 @@ public class vIdentificarse extends JFrame {
 		JButton btnMenu = new JButton("Menú principal");
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vMenu vm = new vMenu();
-				vm.setVisible(true);
+				miCoordinador.mostrarVentanaMenu();;
 				dispose();
-
 			}
 		});
 		
@@ -99,6 +86,7 @@ public class vIdentificarse extends JFrame {
 		contentPane.add(btnMenu);
 
 //******************************** USUARIO ********************************
+		
 		lblUsuario = new JLabel("Usuario:");
 		lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblUsuario.setForeground(Color.WHITE);
@@ -128,10 +116,8 @@ public class vIdentificarse extends JFrame {
 		btnNuevo = new JButton("Nuevo");
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vNuevo vo = new vNuevo();
-				vo.setVisible(true);
+				miCoordinador.mostrarVentanaNuevo();
 				dispose();
-
 			}
 		});
 		btnNuevo.setForeground(Color.WHITE);
@@ -154,8 +140,7 @@ public class vIdentificarse extends JFrame {
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(contentPane, "Sesión iniciada con exito");
-				vMenu vml = new vMenu();
-				vml.setVisible(true);
+				miCoordinador.mostrarVentanaMenu();
 				dispose();
 			}
 		});
@@ -184,11 +169,10 @@ public class vIdentificarse extends JFrame {
 		} catch (IOException ex) {
 		}
 		contentPane.add(lblFondo);
-		
 
-		
-		
-		
-		
+	}
+	
+	public void setCoordinador(Controlador miCoordinador) {
+		this.miCoordinador=miCoordinador;
 	}
 }

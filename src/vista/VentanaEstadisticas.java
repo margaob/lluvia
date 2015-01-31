@@ -38,40 +38,25 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import controlador.Controlador;
+
 import java.awt.Label;
 
-public class vEstadisticas extends JFrame {
+public class VentanaEstadisticas extends JFrame {
 
 	private JPanel contentPane;
+	
+	private Controlador miCoordinador;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					vEstadisticas frame = new vEstadisticas();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public vEstadisticas() {
+	public VentanaEstadisticas() {
 
 		setResizable(false);
 		setTitle("Lluvia de letras");
-
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 750, 500);
+		setLocationRelativeTo(null);
+		
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -249,10 +234,8 @@ public class vEstadisticas extends JFrame {
 		JButton btnMenu = new JButton("Menú principal");
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vMenu vm = new vMenu();
-				vm.setVisible(true);
+				miCoordinador.mostrarVentanaMenu();
 				dispose();
-
 			}
 		});
 
@@ -275,11 +258,9 @@ public class vEstadisticas extends JFrame {
 		// ******************************** BOTÓ MENÚ RANKING ********************************
 		JButton btnRanking = new JButton("Ranking");
 		btnRanking.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				vRanking vr = new vRanking();
-				vr.setVisible(true);
-				dispose();
-
+			public void actionPerformed(ActionEvent e) {				
+			miCoordinador.mostrarVentanaRanking();
+			dispose();
 			}
 		});
 		btnRanking.setForeground(Color.WHITE);
@@ -302,10 +283,8 @@ public class vEstadisticas extends JFrame {
 		JButton btnNueva = new JButton("Nueva Partida");
 		btnNueva.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vJoc vj = new vJoc();
-				vj.setVisible(true);
+				miCoordinador.mostrarVentanaJuego();
 				dispose();
-
 			}
 		});
 		btnNueva.setForeground(Color.WHITE);
@@ -336,9 +315,11 @@ public class vEstadisticas extends JFrame {
 		}
 
 		contentPane.add(lblFondo);
-		
 
-
+	}
+	
+	public void setCoordinador(Controlador miCoordinador) {
+		this.miCoordinador=miCoordinador;
 	}
 	
 }
