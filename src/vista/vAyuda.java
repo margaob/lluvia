@@ -18,6 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import javax.swing.DropMode;
 
 public class vAyuda extends JFrame {
 
@@ -57,20 +61,32 @@ public class vAyuda extends JFrame {
 				//***************TEXTO
 				
 				JTextPane textAyuda = new JTextPane();
-				textAyuda.setText(" COMO JUGAR"
-						+ "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-						+ "Integer interdum ex in velit interdum, congue egestas diam laoreet. "
-						+ "Curabitur eget euismod erat, placerat malesuada ex. "
-						+ "Phasellus ultrices lacus vitae nibh pulvinar aliquet. "
-						+ "Etiam velit tortor, luctus scelerisque elit at, dictum rhoncus massa. "
-						+ "In suscipit pellentesque ipsum, condimentum accumsan nunc finibus at. "
-						+ "Cras gravida est eget justo consectetur ultricies ac eu nisi. "
-						+ "Proin pellentesque urna in volutpat scelerisque. "
-						+ "Cras convallis elit sit amet elit tempor posuere. "
-						+ "Nunc non ultricies quam. Maecenas dictum iaculis erat ut consequat.");
+				
+				StyledDocument doc = textAyuda.getStyledDocument();
+				SimpleAttributeSet center = new SimpleAttributeSet();
+				StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+				doc.setParagraphAttributes(0, doc.getLength(), center, false);
 				
 				
-						textAyuda.setBounds(20, 91, 700, 288);
+				textAyuda.setFont(new Font("Verdana", Font.PLAIN, 14));
+				textAyuda.setEditable(false);
+				textAyuda.setText("\n" +
+						"COMO JUGAR \n" +
+						"\n" +
+						"Realiza combinaciones con las 6 letras al azar dadas al principio.\n" +
+						"Mínimo combinaciones 3 letras.\n" +
+						"Cuantas más letras tenga la palabra más puntos recibirás:\n" +
+						"*Palabras de 3 letras : 10 puntos.\n" +
+						"*Palabras de 4 letras : 30 puntos.\n" +
+						"*Palabras de 5 letras : 40 puntos.\n" +
+						"*Palabras de 6 letras : 75 puntos.\n" +
+						"La partida finaliza cuando aciertas todas las palabras o cuando acaba el tiempo.\n" +
+						"*Bonus por acertar todas las palabras : 200 puntos.\n" +
+						"Realiza el máximo de palabras para entrar en el ranking.\n" +
+						"Para ver como vas mejorando en el juego, identifícate y visita tus estadísticas");
+				
+				
+						textAyuda.setBounds(45, 91, 641, 288);
 						contentPane.add(textAyuda);
 		
 		//******************************** TITULO ********************************
