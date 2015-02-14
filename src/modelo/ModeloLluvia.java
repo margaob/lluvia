@@ -1,6 +1,7 @@
 package modelo;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,8 +13,7 @@ import javax.swing.JOptionPane;
 import controlador.Controlador;
 import controlador.Principal;
 import vista.VentanaJuego;
-import vista.VentanaMenu;
-import vista.VentanaRanking;
+
 
 public class ModeloLluvia {
 	
@@ -40,25 +40,131 @@ public class ModeloLluvia {
 		  private static ArrayList<String> paraulesEncertades5lletres = new ArrayList<String>();
 		  private static ArrayList<String> paraulesEncertades6lletres = new ArrayList<String>();
 		  
-		  
 		  private static ArrayList <Ranking> ranking = new  ArrayList<Ranking>();
-		  
 		  private static int totalParaules=0;
 		  private static int paraulesEncertades=0;
 		  
-		  private Object [] rank = new Object[2];
+		  public String usuarioLogeado;
 		  
+		  private Object [] rank = new Object[2];
+  
 		  public static int puntuacio=0;
+		  
+		  public void modeloLluvia(){
 		
-		public void modeloLluvia(){
-		
-		}
+		  }
 		
 		
 		public void setCoordinador(Controlador miCoordinador) {
 			this.miCoordinador=miCoordinador;
 			
 		}
+				
+		public int registrarUsuario (String usuario, String pass){
+			
+			Connexio con= new Connexio();
+			ResultSet usuariExiteix=null;
+			
+			try {
+				
+				// mirar que nombre usuario no exista!!
+				Statement stmt = con.getConnection().createStatement();
+
+				if (!buscarUsuario(usuario)){ // si no existe lo registramos
+					stmt.executeUpdate("INSERT INTO usuarios VALUES ('"+usuario+"','"+pass+"')");
+					JOptionPane.showMessageDialog(null, "Usuario creado con exito","Información",JOptionPane.INFORMATION_MESSAGE);
+					
+				}else{
+					JOptionPane.showMessageDialog(null, "Este usuario ya existe","Información",JOptionPane.INFORMATION_MESSAGE);
+				}
+
+				stmt.close();
+				con.desconnectar();
+				
+				return 0;
+				
+			} catch (SQLException e) {
+	            System.out.println(e.getMessage());
+				JOptionPane.showMessageDialog(null, "No se Registro");
+				return -1;
+			}
+	
+	}
+		
+	public void logearUsuario(String usuario, String pass){
+		
+		Connexio con= new Connexio();
+		ResultSet passCorrecta=null;
+
+		try {
+			
+		if (buscarUsuario(usuario)){ //si existe, comprobamos contraseña
+
+			Statement stmt = con.getConnection().createStatement();
+			
+			//usuariExiteix=stmt.executeQuery("select count(*) from usuarios where usuario = '"+usuario+"'");
+			passCorrecta=stmt.executeQuery("select count(*) from usuarios where pass = '"+pass+"'");
+			
+			int e=0;
+							
+			while(passCorrecta.next()) e=passCorrecta.getInt(1);
+		
+			if(e==0){
+				//pass no coincideix
+			JOptionPane.showMessageDialog(null, "La contraseña no coincide","Información",
+						JOptionPane.INFORMATION_MESSAGE);
+			}else{
+				
+				usuarioLogeado=usuario;
+			}
+		}			
+		else{ //no existe usuario
+			JOptionPane.showMessageDialog(null, "Este usuario no existe","Información",JOptionPane.INFORMATION_MESSAGE);
+			
+		}
+		
+		} catch (SQLException e) {
+            System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null, "No se Registro");
+		}
+		
+	}
+		
+	private boolean buscarUsuario(String usuario){
+		
+		Connexio con= new Connexio();
+		ResultSet usuariExiteix=null;
+		
+		try {
+			
+			// mirar que nombre usuario no exista!!
+			Statement stmt = con.getConnection().createStatement();
+			
+			usuariExiteix=stmt.executeQuery("select count(*) from usuarios where usuario = '"+usuario+"'");
+			
+			int e=0;
+							
+			while(usuariExiteix.next())
+		        e=usuariExiteix.getInt(1);
+		
+		if(e==0){
+			return false;
+		}
+		else{
+			
+			return true;
+			
+		}
+		
+		} //try
+		
+		catch (Exception e){
+			
+			System.out.println("Error :" +e.toString());
+		}
+		return false;
+
+	}
 		
 
 	/**
@@ -114,9 +220,8 @@ public class ModeloLluvia {
 		lletra6 = alletra3[l6];
 		
 
-		vj = new VentanaJuego();
-		vj.posarLletres(lletra1, lletra2, lletra3, lletra4, lletra5, lletra6);
-		
+		miCoordinador.getVentanaJuego().posarLletres(lletra1, lletra2, lletra3, lletra4, lletra5, lletra6);
+	
 		char[] elements = new char[6];
 		
 		elements[0] = lletra1;
@@ -168,11 +273,11 @@ public class ModeloLluvia {
 		prepararEncertades(paraulesCoincidents5lletres,paraulesEncertades5lletres);
 		prepararEncertades(paraulesCoincidents6lletres,paraulesEncertades6lletres);
 		
-
-		vj.omplirTaula3(paraulesEncertades3lletres);
-		vj.omplirTaula4(paraulesEncertades4lletres);
-		vj.omplirTaula5(paraulesEncertades5lletres);
-		vj.omplirTaula6(paraulesEncertades6lletres);
+		
+		miCoordinador.getVentanaJuego().omplirTaula3(paraulesEncertades3lletres);
+		miCoordinador.getVentanaJuego().omplirTaula4(paraulesEncertades4lletres);
+		miCoordinador.getVentanaJuego().omplirTaula5(paraulesEncertades5lletres);
+		miCoordinador.getVentanaJuego().omplirTaula6(paraulesEncertades6lletres);
 
 		//si no hi ha prous paraules per jugar una partida bé
 		
@@ -317,15 +422,15 @@ public class ModeloLluvia {
 					
 					paraulesEncertades3lletres.add(pos, paraula); //insertam la paraula que coincideix
 					paraulesEncertades3lletres.remove(pos+1); //borram el null que hem substituit
-					vj.omplirTaula3(paraulesEncertades3lletres);
+					miCoordinador.getVentanaJuego().omplirTaula3(paraulesEncertades3lletres);
 					puntuacio=puntuacio+10;
 					paraulesEncertades++;
-					vj.actualitzarPuntuacio(Integer.toString(puntuacio)+" puntos.");
+					miCoordinador.getVentanaJuego().actualitzarPuntuacio(Integer.toString(puntuacio)+" puntos.");
 				}
 				else{
 					if ((pos >= 0) && (paraulesEncertades3lletres.get(pos).equals(paraula))){
 					
-					vj.actualitzarPuntuacio("Palabra repetida!");
+						miCoordinador.getVentanaJuego().actualitzarPuntuacio("Palabra repetida!");
 					
 					}
 				}
@@ -340,15 +445,15 @@ public class ModeloLluvia {
 					
 					paraulesEncertades4lletres.add(pos, paraula);
 					paraulesEncertades4lletres.remove(pos+1);
-					vj.omplirTaula4(paraulesEncertades4lletres);
+					miCoordinador.getVentanaJuego().omplirTaula4(paraulesEncertades4lletres);
 					puntuacio=puntuacio+30;
 					paraulesEncertades++;
-					vj.actualitzarPuntuacio(Integer.toString(puntuacio)+" puntos.");
+					miCoordinador.getVentanaJuego().actualitzarPuntuacio(Integer.toString(puntuacio)+" puntos.");
 				}
 				else{
 					if ((pos >= 0) && (paraulesEncertades4lletres.get(pos).equals(paraula))){
 					
-					vj.actualitzarPuntuacio("Palabra repetida!");
+						miCoordinador.getVentanaJuego().actualitzarPuntuacio("Palabra repetida!");
 					
 					}
 				}
@@ -364,15 +469,15 @@ public class ModeloLluvia {
 					
 					paraulesEncertades5lletres.add(pos, paraula);
 					paraulesEncertades5lletres.remove(pos+1);
-					vj.omplirTaula5(paraulesEncertades5lletres);
+					miCoordinador.getVentanaJuego().omplirTaula5(paraulesEncertades5lletres);
 					puntuacio=puntuacio+40;
 					paraulesEncertades++;
-					vj.actualitzarPuntuacio(Integer.toString(puntuacio)+" puntos.");
+					miCoordinador.getVentanaJuego().actualitzarPuntuacio(Integer.toString(puntuacio)+" puntos.");
 				}
 				else{
 					if ((pos >= 0) && (paraulesEncertades5lletres.get(pos).equals(paraula))){
 					
-					vj.actualitzarPuntuacio("Palabra repetida!");
+						miCoordinador.getVentanaJuego().actualitzarPuntuacio("Palabra repetida!");
 					
 					}
 				}
@@ -388,15 +493,15 @@ public class ModeloLluvia {
 					
 					paraulesEncertades6lletres.add(pos, paraula);
 					paraulesEncertades6lletres.remove(pos+1);
-					vj.omplirTaula6(paraulesEncertades6lletres);
+					miCoordinador.getVentanaJuego().omplirTaula6(paraulesEncertades6lletres);
 					puntuacio=puntuacio+75;
 					paraulesEncertades++;
-					vj.actualitzarPuntuacio(Integer.toString(puntuacio)+" puntos.");
+					miCoordinador.getVentanaJuego().actualitzarPuntuacio(Integer.toString(puntuacio)+" puntos.");
 				}
 				else{
 					if ((pos >= 0) && (paraulesEncertades6lletres.get(pos).equals(paraula))){
 					
-					vj.actualitzarPuntuacio("Palabra repetida!");
+						miCoordinador.getVentanaJuego().actualitzarPuntuacio("Palabra repetida!");
 					
 					}
 				}
@@ -412,7 +517,7 @@ public class ModeloLluvia {
 				entrarRanking();
 				
 				//controladorM.voureRanking();
-				vj.setVisible(false);
+				miCoordinador.getVentanaJuego().setVisible(false);
 			
 
 			}
@@ -484,8 +589,9 @@ public class ModeloLluvia {
 		 * 
 		 * 
 		 */
+		//public Object [] omplirRanking(){
 		public void omplirRanking(){
-/*			
+			
 			Connexio con= new Connexio();
 	    	
 	    	Statement stmt = null;
@@ -498,7 +604,7 @@ public class ModeloLluvia {
 				stmt = con.getConnection().createStatement();
 				
 
-				topRanking=stmt.executeQuery("select usuario,puntuacion from ranking order by puntuacion desc");
+				topRanking=stmt.executeQuery("select usuario,puntuacion from estadisticas order by puntuacion desc");
 
 		            while (topRanking.next() && conta < 20 ) {
 		                for (int i = 0; i < 2; i++) {
@@ -506,7 +612,7 @@ public class ModeloLluvia {
 		                        conta++;
 		                }
 		                
-		                pantallaR.omplirRanking(rank);
+		                miCoordinador.getVentanaRanking().omplirRanking(rank);
 		                
 		            }
 
@@ -517,13 +623,63 @@ public class ModeloLluvia {
 				
 				System.out.println("Error :" +e.toString());
 			}
-*/
+	    	
+			//return rank;
+			
 		}
+		
+		
+			public void omplirEstadistiques(){
+			
+			Connexio con= new Connexio();
+	    	Statement stmt = null;
+	    	ResultSet estats =null;
+	    	usuarioLogeado = "marga";
+	    	int maxPunt=0,maxPorcen=0, minPunt=100000, minPorcen=100, mitja=0, total = 0;
+	    	try{
 
+				stmt = con.getConnection().createStatement();
+
+				estats=stmt.executeQuery("select * from estadisticas where usuario='"+usuarioLogeado+"'");
+
+				while (estats.next() ) {
+
+							//maxpuntacios
+		                    if (estats.getInt(4)>maxPunt)maxPunt=estats.getInt(4); 
+		                    //maxporcent
+		                    if (((estats.getInt(6)*100)/estats.getInt(5))>maxPorcen) maxPorcen=(estats.getInt(6)*100)/estats.getInt(5);
+		                    //minpunt
+		                    if (estats.getInt(4)<minPunt)minPunt=estats.getInt(4);
+		                    //minporcent
+		                    if (((estats.getInt(6)*100)/estats.getInt(5))<minPorcen) minPorcen=(estats.getInt(6)*100)/estats.getInt(5);
+		                    
+		                    mitja+=estats.getInt(4);
+		                    total++;
+		                    
+		         }
+				
+				System.out.println("Mitja: "+ mitja+" Total: "+ total);
+				
+				miCoordinador.getVentanaEstadisticas().mPuntuacion.setText(Integer.toString(maxPunt));
+				miCoordinador.getVentanaEstadisticas().mPorcentaje.setText(Integer.toString(maxPorcen));
+				miCoordinador.getVentanaEstadisticas().pPuntuacion.setText(Integer.toString(minPunt));
+				miCoordinador.getVentanaEstadisticas().pPorcentaje.setText(Integer.toString(minPorcen));
+				miCoordinador.getVentanaEstadisticas().lblmedia.setText(" "+Integer.toString(mitja/total));
+
+		         con.desconnectar();
+  
+		        } catch (Exception e) {
+				
+				System.out.println("Error :" +e.toString());
+			}
+
+		}
 		/**
 		 * Si es superen les puntacions del ranking, es pot posar un nom i s'entra al ranking
 		 * 
 		 */
+			
+//CAMBIAR TOT METODE!			
 		public void entrarRanking(){
 			
 			boolean entrarRanking = false;
@@ -541,7 +697,7 @@ public class ModeloLluvia {
 				stmt = con.getConnection().createStatement();
 				
 
-				topRanking=stmt.executeQuery("select usuario,puntuacion from ranking order by puntuacion desc");
+				topRanking=stmt.executeQuery("select usuario,puntuacion from estadisticas order by puntuacion desc");
 
 		            
 		    		ranking = new  ArrayList<Ranking>();
@@ -575,7 +731,7 @@ public class ModeloLluvia {
 				 					
 				 					
 				 				}
-
+//modificar aixo!!
 		 				if (entrarRanking){
 		 					
 		 					String nomUsuari = JOptionPane.showInputDialog(

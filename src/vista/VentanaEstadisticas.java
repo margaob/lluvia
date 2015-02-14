@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -25,6 +28,8 @@ import javax.swing.JTextPane;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
+
+import modelo.Connexio;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -45,8 +50,11 @@ import java.awt.Label;
 public class VentanaEstadisticas extends JFrame {
 
 	private JPanel contentPane;
-	
 	private Controlador miCoordinador;
+	public JLabel mPuntuacion, mPorcentaje, pPuntuacion, pPorcentaje, lblmedia;
+	public int mitja;
+	public XYSeries series = null;
+	public ArrayList<Integer> prova;
 
 
 	public VentanaEstadisticas() {
@@ -109,41 +117,47 @@ public class VentanaEstadisticas extends JFrame {
 		lblpPorcentaje.setBounds(61, 334, 212, 14);
 		contentPane.add(lblpPorcentaje);
 
-		JLabel mPuntuacion = new JLabel("600");
+		mPuntuacion = new JLabel();
 		mPuntuacion.setHorizontalAlignment(SwingConstants.CENTER);
 		mPuntuacion.setForeground(Color.WHITE);
 		mPuntuacion.setFont(new Font("Verdana", Font.BOLD, 12));
 		mPuntuacion.setBounds(279, 150, 70, 14);
 		contentPane.add(mPuntuacion);
 
-		JLabel mPorcentaje = new JLabel("80");
+		mPorcentaje = new JLabel();
 		mPorcentaje.setHorizontalAlignment(SwingConstants.CENTER);
 		mPorcentaje.setForeground(Color.WHITE);
 		mPorcentaje.setFont(new Font("Verdana", Font.BOLD, 12));
 		mPorcentaje.setBounds(279, 194, 70, 14);
 		contentPane.add(mPorcentaje);
 
-		JLabel pPuntuacion = new JLabel("150");
+		pPuntuacion = new JLabel();
 		pPuntuacion.setHorizontalAlignment(SwingConstants.CENTER);
 		pPuntuacion.setForeground(Color.WHITE);
 		pPuntuacion.setFont(new Font("Verdana", Font.BOLD, 12));
 		pPuntuacion.setBounds(279, 289, 70, 14);
 		contentPane.add(pPuntuacion);
 
-		JLabel pPorcentaje = new JLabel("15");
+		pPorcentaje = new JLabel();
 		pPorcentaje.setHorizontalAlignment(SwingConstants.CENTER);
 		pPorcentaje.setForeground(Color.WHITE);
 		pPorcentaje.setFont(new Font("Verdana", Font.BOLD, 12));
 		pPorcentaje.setBounds(279, 334, 70, 14);
 		contentPane.add(pPorcentaje);
-		
-		int punts = 325;
-		JLabel lblPuntMedia = new JLabel("Puntuación media : "+ punts);
-		lblPuntMedia.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPuntMedia.setBounds(378, 323, 336, 50);
+	
+		JLabel lblPuntMedia = new JLabel("Puntuación media : ");
+		lblPuntMedia.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPuntMedia.setBounds(378, 323, 221, 50);
 		lblPuntMedia.setForeground(Color.WHITE);
 		lblPuntMedia.setFont(new Font("Verdana", Font.BOLD, 12));
 		contentPane.add(lblPuntMedia);
+		
+		lblmedia = new JLabel("");
+		lblmedia.setHorizontalAlignment(SwingConstants.LEFT);
+		lblmedia.setForeground(Color.WHITE);
+		lblmedia.setFont(new Font("Verdana", Font.BOLD, 12));
+		lblmedia.setBounds(603, 323, 111, 50);
+		contentPane.add(lblmedia);
 
 		// ************************ GRAFICA ******************************************************
 
@@ -158,13 +172,29 @@ public class VentanaEstadisticas extends JFrame {
 		lblLinea.setOpaque(false);
 		panelLinea.add(lblLinea);
 		
-		XYSeries series = null;
+		
 		XYDataset datos;
 		JFreeChart linea = null;
 		int x = 1;
 
 		series = new XYSeries("");
+		
+		llenarGrafica();
 
+		//llenarGrafica();
+		/*ArrayList <Integer> p = new ArrayList<Integer>();
+		p.add(85);
+		p.add(20);
+		p.add(550);
+		p.add(150);
+
+		
+		for (int i = 0; i < p.size(); i++) {
+			series.add(x, p.get(i));
+			x++;
+		}*/
+		
+		/*
 		series.add(x, 85);
 		x++;
 		series.add(x, 20);
@@ -185,7 +215,7 @@ public class VentanaEstadisticas extends JFrame {
 		x++;
 		series.add(x, 1150);
 		x++;
-		
+		*/
 		datos = new XYSeriesCollection(series);
 
 		
@@ -320,6 +350,36 @@ public class VentanaEstadisticas extends JFrame {
 	
 	public void setCoordinador(Controlador miCoordinador) {
 		this.miCoordinador=miCoordinador;
+	}
+	
+	public void llenarGrafica(){
+		
+		ArrayList<Integer> punts = new ArrayList <Integer>();
+		Connexio con= new Connexio();
+    	Statement stmt = null;
+    	ResultSet estats =null;
+    	String usuarioLogeado = "marga";
+    	int x = 1;
+    	
+    	try{
+
+			stmt = con.getConnection().createStatement();
+			estats=stmt.executeQuery("select * from estadisticas where usuario='"+usuarioLogeado+"'");
+			while (estats.next()){
+				punts.add(estats.getInt(4));
+			}
+
+			for (int i = 0; i < punts.size(); i++) {
+				series.add((x+1),punts.get(i));
+				x++;
+			}
+	         con.desconnectar();
+	         	         
+	        } catch (Exception e) {
+
+			System.out.println("Error :" +e.toString());
+		}
+		
 	}
 	
 }

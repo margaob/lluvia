@@ -20,11 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import controlador.Controlador;
-
-
 
 public class VentanaRanking extends JFrame {
 
@@ -81,6 +80,9 @@ public class VentanaRanking extends JFrame {
 
 //******************************** TABLA ********************************		
 		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+
 		dtmR = new DefaultTableModel();
 
 		dtmR.addColumn("Usuario");
@@ -91,6 +93,9 @@ public class VentanaRanking extends JFrame {
 		contentPane.add(scrollPaneR);
 
 		rank = new JTable(dtmR);
+		rank.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
+		rank.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
+		rank.setEnabled(false);
 	
         
 		scrollPaneR.setViewportView(rank);
@@ -184,7 +189,6 @@ public class VentanaRanking extends JFrame {
 	 * @param top
 	 */
   public void omplirRanking (Object [] top){
-	
 
 	  dtmR.addRow(top);
 

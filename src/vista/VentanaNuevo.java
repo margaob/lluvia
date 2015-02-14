@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -30,9 +31,9 @@ public class VentanaNuevo extends JFrame {
 	
 	private JPanel contentPane;
 	private JLabel lblUsuario;
-	private JLabel lblConstrasenya;
+	private JLabel lblConstrasenya, lblConstrasenya2;
 	private JTextField txtUsuario;
-	private JTextField txtContrasenya;
+	private JPasswordField txtContrasenya, txtContrasenya2;
 	private JButton btnNuevo;
 
 	/**
@@ -54,12 +55,12 @@ public class VentanaNuevo extends JFrame {
 		lblUsuario = new JLabel("Usuario:");
 		lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblUsuario.setForeground(Color.WHITE);
-		lblUsuario.setFont(new Font("Verdana", Font.BOLD, 16));
-		lblUsuario.setBounds(10, 85, 146, 30);
+		lblUsuario.setFont(new Font("Verdana", Font.BOLD, 14));
+		lblUsuario.setBounds(20, 68, 146, 30);
 		contentPane.add(lblUsuario);
 
 		txtUsuario = new JTextField();
-		txtUsuario.setBounds(183, 85, 226, 30);
+		txtUsuario.setBounds(183, 70, 226, 30);
 		contentPane.add(txtUsuario);
 		txtUsuario.setColumns(10);
 
@@ -67,23 +68,48 @@ public class VentanaNuevo extends JFrame {
 		lblConstrasenya = new JLabel("Contrase\u00F1a:");
 		lblConstrasenya.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblConstrasenya.setForeground(Color.WHITE);
-		lblConstrasenya.setFont(new Font("Verdana", Font.BOLD, 16));
-		lblConstrasenya.setBounds(20, 126, 146, 30);
+		lblConstrasenya.setFont(new Font("Verdana", Font.BOLD, 14));
+		lblConstrasenya.setBounds(20, 104, 146, 30);
 		contentPane.add(lblConstrasenya);
 
-		txtContrasenya = new JTextField();
-		txtContrasenya.setBounds(183, 126, 226, 30);
+		txtContrasenya = new JPasswordField();
+		txtContrasenya.setBounds(183, 105, 226, 30);
 		contentPane.add(txtContrasenya);
 		txtContrasenya.setColumns(10);
+		
+		lblConstrasenya2 = new JLabel("Repetir Contrase\u00F1a:");
+		lblConstrasenya2.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblConstrasenya2.setForeground(Color.WHITE);
+		lblConstrasenya2.setFont(new Font("Verdana", Font.BOLD, 14));
+		lblConstrasenya2.setBounds(0, 134, 166, 42);
+		contentPane.add(lblConstrasenya2);
+
+		txtContrasenya2 = new JPasswordField();
+		txtContrasenya2.setBounds(183, 142, 226, 30);
+		contentPane.add(txtContrasenya2);
+		txtContrasenya2.setColumns(10);
 
 		// ******************************** BOTON NUEVO
 		// ********************************
 		btnNuevo = new JButton("Aceptar");
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Usuario creado con exito");
-				miCoordinador.mostrarVentanaIdentificarse();
-				dispose();
+
+				if (txtContrasenya.getText().length()==0){
+					JOptionPane.showMessageDialog(contentPane, "No has escrito ninguna contraseña");
+				}else{
+					
+					if (txtContrasenya.getText().equals(txtContrasenya2.getText())){
+						char[] pass = txtContrasenya.getPassword();
+						miCoordinador.nuevoUsuario(txtUsuario.getText(),txtContrasenya.getText());
+						miCoordinador.mostrarVentanaIdentificarse();
+						dispose();
+					}else{
+						JOptionPane.showMessageDialog(contentPane, "Las contraseñas no coinciden");
+					}
+				}
+				
+				
 			}
 		});
 		btnNuevo.setForeground(Color.WHITE);
@@ -98,7 +124,7 @@ public class VentanaNuevo extends JFrame {
 		} catch (IOException ex) {
 		}
 		btnNuevo.setFont(new Font("Verdana", Font.BOLD, 14));
-		btnNuevo.setBounds(183, 160, 226, 50);
+		btnNuevo.setBounds(183, 165, 226, 50);
 		contentPane.add(btnNuevo);
 		
 		

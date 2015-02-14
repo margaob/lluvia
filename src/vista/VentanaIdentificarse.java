@@ -21,18 +21,18 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import controlador.Controlador;
+import javax.swing.JPasswordField;
 
 public class VentanaIdentificarse extends JFrame {
 
 	private Controlador miCoordinador;
 	
 	private JPanel contentPane;
+	private JPasswordField txtContrasenya;
 	private JTextField txtUsuario;
-	private JTextField txtContrasenya;
 	private JLabel lblUsuario;
 	private JLabel lblConstrasenya;
-	private JButton btnIniciarSesion;
-	private JButton btnNuevo;
+	private JButton btnNuevo, btnIniciarSesion;
 
 	/**
 	 * Create the frame.
@@ -107,7 +107,8 @@ public class VentanaIdentificarse extends JFrame {
 		lblConstrasenya.setBounds(98, 264, 146, 30);
 		contentPane.add(lblConstrasenya);
 
-		txtContrasenya = new JTextField();
+		
+		txtContrasenya = new JPasswordField();
 		txtContrasenya.setBounds(271, 268, 320, 30);
 		contentPane.add(txtContrasenya);
 		txtContrasenya.setColumns(10);
@@ -139,9 +140,12 @@ public class VentanaIdentificarse extends JFrame {
 		btnIniciarSesion = new JButton("<html>Iniciar<br />Sesión</html>");
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "Sesión iniciada con exito");
-				miCoordinador.mostrarVentanaMenu();
-				dispose();
+				
+				if (miCoordinador.logearse(txtUsuario.getText(),txtContrasenya.getText()) == 0){
+					JOptionPane.showMessageDialog(contentPane, txtUsuario.getText()+", sesión iniciada con exito.");
+					miCoordinador.mostrarVentanaMenu();
+					dispose();
+				}
 			}
 		});
 		btnIniciarSesion.setForeground(Color.WHITE);
@@ -169,6 +173,8 @@ public class VentanaIdentificarse extends JFrame {
 		} catch (IOException ex) {
 		}
 		contentPane.add(lblFondo);
+		
+
 
 	}
 	

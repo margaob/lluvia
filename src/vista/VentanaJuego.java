@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,7 +53,7 @@ public class VentanaJuego extends JFrame {
 	private JScrollPane scrollPane6;
 
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField txtComprobar;
 	private JTable table;
 	private JTextField tLletra1;
 	private JTextField tLletra2;
@@ -111,7 +113,7 @@ public class VentanaJuego extends JFrame {
 
 		// ******************************** LLETRES ********************************
 
-		tLletra1 = new JTextField("B");
+		tLletra1 = new JTextField("");
 		tLletra1.setHorizontalAlignment(SwingConstants.CENTER);
 		tLletra1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tLletra1.setForeground(new Color(25, 25, 112));
@@ -120,7 +122,7 @@ public class VentanaJuego extends JFrame {
 		tLletra1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(tLletra1);
 
-		tLletra2 = new JTextField("B");
+		tLletra2 = new JTextField("");
 		tLletra2.setHorizontalAlignment(SwingConstants.CENTER);
 		tLletra2.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tLletra2.setForeground(new Color(25, 25, 112));
@@ -129,7 +131,7 @@ public class VentanaJuego extends JFrame {
 		tLletra2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(tLletra2);
 
-		tLletra3 = new JTextField("B");
+		tLletra3 = new JTextField("");
 		tLletra3.setHorizontalAlignment(SwingConstants.CENTER);
 		tLletra3.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tLletra3.setForeground(new Color(25, 25, 112));
@@ -138,7 +140,7 @@ public class VentanaJuego extends JFrame {
 		tLletra3.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(tLletra3);
 
-		tLletra4 = new JTextField("B");
+		tLletra4 = new JTextField("");
 		tLletra4.setHorizontalAlignment(SwingConstants.CENTER);
 		tLletra4.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tLletra4.setForeground(new Color(25, 25, 112));
@@ -147,7 +149,7 @@ public class VentanaJuego extends JFrame {
 		tLletra4.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(tLletra4);
 
-		tLletra5 = new JTextField("B");
+		tLletra5 = new JTextField("");
 		tLletra5.setHorizontalAlignment(SwingConstants.CENTER);
 		tLletra5.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tLletra5.setForeground(new Color(25, 25, 112));
@@ -156,7 +158,7 @@ public class VentanaJuego extends JFrame {
 		tLletra5.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(tLletra5);
 
-		tLletra6 = new JTextField("B");
+		tLletra6 = new JTextField("");
 		tLletra6.setHorizontalAlignment(SwingConstants.CENTER);
 		tLletra6.setFont(new Font("Tahoma", Font.BOLD, 14));
 		tLletra6.setForeground(new Color(25, 25, 112));
@@ -167,11 +169,11 @@ public class VentanaJuego extends JFrame {
 
 		// ******************************** PUNTUACIÓ ********************************
 
-		tPuntuacio = new JLabel("30");
+		tPuntuacio = new JLabel("");
 		tPuntuacio.setHorizontalAlignment(SwingConstants.CENTER);
 		tPuntuacio.setForeground(Color.WHITE);
 		tPuntuacio.setFont(new Font("Verdana", Font.BOLD, 18));
-		tPuntuacio.setBounds(651, 165, 72, 30);
+		tPuntuacio.setBounds(613, 165, 121, 30);
 		contentPane.add(tPuntuacio);
 
 		JLabel lblPuntuacio = new JLabel("");
@@ -182,7 +184,7 @@ public class VentanaJuego extends JFrame {
 			lblPuntuacio.setIcon(new ImageIcon(imgPuntuacio));
 		} catch (IOException ex) {
 		}
-		lblPuntuacio.setBounds(641, 115, 93, 52);
+		lblPuntuacio.setBounds(613, 122, 121, 52);
 		contentPane.add(lblPuntuacio);
 
 		// ******************************** BOTÓ MENÚ COMPROBAR ********************************
@@ -190,8 +192,9 @@ public class VentanaJuego extends JFrame {
 		JButton btnComprobar = new JButton("Comprobar");
 		btnComprobar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(contentPane,
-						"He comprobado una palabra");
+				
+				miCoordinador.comprovarParaules(txtComprobar.getText());
+				txtComprobar.setText("");
 			}
 		});
 		btnComprobar.setForeground(Color.WHITE);
@@ -235,10 +238,26 @@ public class VentanaJuego extends JFrame {
 
 		// *******************TEXTFIELD***************************
 
-		textField = new JTextField();
-		textField.setBounds(30, 205, 580, 30);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		txtComprobar = new JTextField();
+		txtComprobar.setBounds(30, 205, 580, 30);
+		contentPane.add(txtComprobar);
+		txtComprobar.setColumns(10);
+		
+		txtComprobar.addKeyListener
+	      (new KeyAdapter() {
+	         public void keyPressed(KeyEvent e) {
+	           int key = e.getKeyCode();
+	           if (key == KeyEvent.VK_ENTER) {
+
+	        	 miCoordinador.comprovarParaules(txtComprobar.getText());
+	            
+	        	 txtComprobar.setText("");
+	              
+	              }
+	           }
+	      	}
+	         
+	      );
 
 		// ******************************** TABLA 3 LETRAS********************************
 
@@ -395,12 +414,7 @@ public class VentanaJuego extends JFrame {
 	 * 
 	 * POsam les lletres a les caselles perque les vegui el jugador
 	 * 
-	 * @param l1
-	 * @param l2
-	 * @param l3
-	 * @param l4
-	 * @param l5
-	 * @param l6
+
 	 */
 	public void posarLletres(char l1, char l2, char l3, char l4, char l5,
 			char l6) {
